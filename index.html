@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#102e29" />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="description" content="Descubra seu amigo oculto de Natal em segredo." />
+  <title>Amigo Oculto de Natal 🎁</title>
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="./estilo.css" />
+  <script src="./app.js" defer></script>
+</head>
+<body>
+  <div class="snow s1" aria-hidden="true">✳</div>
+  <div class="snow s2" aria-hidden="true">✦</div>
+  <div class="snow s3" aria-hidden="true">✳</div>
+  <div class="snow s4" aria-hidden="true">✦</div>
+  <div class="snow s5" aria-hidden="true">✳</div>
+  <main class="app">
+    <header class="headline">
+      <span class="eyebrow"><span class="sparkle">✦</span> NATAL 2026 <span class="sparkle">✦</span></span>
+      <div class="big-gift" aria-hidden="true">🎁</div>
+      <h1>Amigo <em>Oculto</em></h1>
+      <p class="subtitle">A surpresa está esperando por você.</p>
+    </header>
+    <section class="panel" aria-labelledby="panel-title">
+      <div class="holly" aria-hidden="true">❋</div>
+      <div id="form-view">
+        <h2 id="panel-title">Quem será que você tirou?</h2>
+        <p class="helper">Escolha seu nome e digite o código individual que recebeu em particular.</p>
+        <form id="reveal-form" autocomplete="off">
+          <label for="nome">Seu nome</label>
+          <div class="control-wrap">
+            <select name="nome" id="nome" required>
+              <option value="" disabled selected>Selecione seu nome</option>
+              <option>Marcela</option>
+              <option>Rafaela</option>
+              <option>Regina</option>
+              <option>Joadeson</option>
+              <option>Joel</option>
+              <option>José</option>
+            </select>
+          </div>
+          <label for="codigo">Seu código de 20 caracteres</label>
+          <div class="control-wrap">
+            <input type="password" id="codigo" name="codigo" autocapitalize="characters" spellcheck="false" maxlength="30" minlength="20" placeholder="XXXX-XXXX-XXXX-XXXX-XXXX" required autocomplete="off" />
+            <button id="toggle-pin" class="show-pin" type="button" aria-label="Mostrar código" aria-pressed="false">Mostrar</button>
+          </div>
+          <p class="code-tip">Digite ou cole o código sem se preocupar com os traços.</p>
+          <p id="message" class="message" role="status" aria-live="polite"></p>
+          <button type="submit" id="reveal-button" class="primary">🎁 &nbsp; Revelar meu amigo oculto</button>
+        </form>
+      </div>
+      <div id="result-view" class="result" hidden>
+        <div class="result-icon" aria-hidden="true">🎉</div>
+        <div class="result-small">Seu amigo oculto é...</div>
+        <div id="chosen-person" class="chosen" aria-live="polite"></div>
+        <p class="result-note">Agora é sua missão guardar esse segredo até a troca dos presentes! 🤫</p>
+        <button type="button" id="hide-button" class="secondary">🔒 &nbsp; Esconder resultado</button>
+      </div>
+    </section>
+    <footer><span aria-hidden="true">✧</span> Seis pessoas, seis surpresas, um Natal especial. <span aria-hidden="true">✧</span><small>Ninguém tira o próprio nome. Boa diversão! ❤️</small></footer>
+  </main>
+</body>
+</html>
