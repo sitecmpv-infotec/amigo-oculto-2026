@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#102e29">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="description" content="Painel do organizador do Amigo Oculto 2026">
+  <title>Administração · Amigo Oculto 2026</title>
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./admin.css">
+  <script src="./admin.js" defer></script>
+</head>
+<body>
+  <main class="admin-wrap">
+    <nav class="topnav">
+      <a class="back-link" href="./index.html">← Voltar ao sorteio</a>
+      <span class="nav-label">✦ PAINEL DO ORGANIZADOR</span>
+    </nav>
+
+    <header class="hero">
+      <div class="hero-emoji" aria-hidden="true">🎄</div>
+      <p class="eyebrow">NATAL 2026 · ÁREA PRIVADA</p>
+      <h1>Central do <em>Amigo Oculto</em></h1>
+      <p>Gerencie os participantes e prepare um novo sorteio com segurança.</p>
+    </header>
+
+    <section class="panel login-card" id="login-view" aria-labelledby="login-title">
+      <div class="shield" aria-hidden="true">🔒</div>
+      <h2 id="login-title">Acesso do organizador</h2>
+      <p class="muted centered">Digite a senha administrativa entregue separadamente. Ela nunca é enviada para um servidor.</p>
+      <form id="login-form" autocomplete="off">
+        <label for="admin-password">Senha do administrador</label>
+        <input id="admin-password" name="admin-password" type="password" spellcheck="false" autocapitalize="off" autocomplete="off" required placeholder="Cole a sua senha privada">
+        <button class="button primary" id="login-button" type="submit">🔓 Entrar no painel</button>
+      </form>
+      <p class="alert" role="status" id="login-message" aria-live="polite"></p>
+      <p class="small muted centered">O painel só desbloqueia com a chave privada. O GitHub Pages não guarda sessões ou senhas de administradores.</p>
+    </section>
+
+    <div id="dashboard" hidden>
+      <div class="dash-bar">
+        <div><span class="eyebrow">VISÃO GERAL</span><h2>Seu sorteio</h2></div>
+        <button type="button" id="lock-button" class="button outline">🔒 Bloquear painel</button>
+      </div>
+      <section class="metrics" aria-label="Resumo do sorteio">
+        <div class="metric"><strong id="metric-count">6</strong><span>Participantes</span></div>
+        <div class="metric"><strong>🔐</strong><span>Resultados criptografados</span></div>
+        <div class="metric"><strong>✓</strong><span>Sorteio válido</span></div>
+      </section>
+      <p class="subtle-note" id="draw-date"></p>
+
+      <section class="panel space">
+        <div class="heading-row">
+          <div><h2>👥 Participantes</h2><p class="muted">Confira os códigos e resultados somente quando necessário.</p></div>
+        </div>
+        <div class="toggles">
+          <label class="toggle"><input id="show-matches" type="checkbox"> Mostrar quem cada um tirou</label>
+          <label class="toggle"><input id="show-codes" type="checkbox"> Mostrar códigos individuais</label>
+        </div>
+        <div class="table-scroll">
+          <table aria-label="Participantes do amigo oculto">
+            <thead><tr><th>Participante</th><th>Sorteado</th><th>Código</th><th>Ação</th></tr></thead>
+            <tbody id="participant-rows"></tbody>
+          </table>
+        </div>
+        <button type="button" id="download-codes" class="button minor">⬇ Baixar códigos do sorteio atual</button>
+        <p class="small muted">Nunca compartilhe a lista completa de códigos no grupo. Envie cada código individualmente.</p>
+      </section>
+
+      <section class="panel space">
+        <h2>🧹 Reiniciar testes</h2>
+        <p class="muted">O site não registra quem abriu o resultado. Fechar a revelação e atualizar a página já reinicia o teste em qualquer dispositivo.</p>
+        <button type="button" id="clear-tests" class="button minor">Limpar teste neste navegador</button>
+        <p id="test-message" class="success-msg" role="status" aria-live="polite"></p>
+      </section>
+
+      <section class="panel space">
+        <h2>🎲 Refazer o sorteio</h2>
+        <p class="muted">Gere novas combinações e novos códigos, sem que ninguém tire o próprio nome. O sorteio atual continua funcionando até você publicar o novo arquivo no GitHub.</p>
+        <div class="warning">⚠️ Após a publicação do novo sorteio, <strong>todos os códigos antigos serão invalidados</strong>. Avise os participantes e envie os novos códigos individualmente.</div>
+        <button type="button" id="redraw-button" class="button primary">🎁 Preparar novo sorteio</button>
+
+        <div id="draft-panel" class="draft" hidden>
+          <div class="draft-header"><div><h3>✅ Novo sorteio preparado</h3><p class="muted">Ainda NÃO foi publicado. Siga as etapas abaixo, nesta ordem.</p></div></div>
+          <div class="publish-steps">
+            <div class="step"><span>1</span><div><strong>Guarde os novos códigos</strong><p>Baixe a lista privada antes de publicar.</p><button type="button" class="button minor" id="download-new-codes">⬇ Baixar novos códigos</button></div></div>
+            <div class="step"><span>2</span><div><strong>Copie o arquivo criptografado</strong><p>Este conteúdo pode ser publicado. Não contém senhas ou resultados legíveis.</p><div class="button-line"><button type="button" class="button minor" id="copy-json">📋 Copiar JSON</button><button type="button" class="button minor" id="download-json">⬇ Baixar JSON</button></div></div></div>
+            <div class="step"><span>3</span><div><strong>Publique no GitHub</strong><p>Abra o editor, substitua todo o conteúdo de <code>sorteio-criptografado.json</code> pelo JSON copiado e confirme o commit na branch main.</p><a class="button outline external" href="https://github.com/sitecmpv-infotec/amigo-oculto-2026/edit/main/sorteio-criptografado.json" target="_blank" rel="noopener noreferrer">Abrir editor do GitHub ↗</a></div></div>
+          </div>
+          <button type="button" id="discard-draft" class="button danger-lite">Descartar rascunho</button>
+          <p class="small muted">A troca não acontece automaticamente. É necessário confirmar a alteração no GitHub.</p>
+        </div>
+        <p id="redraw-message" class="alert" role="status" aria-live="polite"></p>
+      </section>
+    </div>
+
+    <footer>🔐 Dados sensíveis protegidos por criptografia no próprio navegador.<br>
+      <small>GitHub Pages · Gerenciamento local, sem servidor administrativo</small>
+    </footer>
+  </main>
+</body>
+</html>
