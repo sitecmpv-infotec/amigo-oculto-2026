@@ -1,0 +1,41 @@
+name: Validar site do Amigo Oculto
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verificar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Obter arquivos
+        uses: actions/checkout@v4
+      - name: Conferir JavaScript e dados públicos
+        shell: bash
+        run: |
+          node --check app.js
+          node --check admin.js
+          node - <<'NODE'
+          const fs = require('node:fs');
+          const assert = require('node:assert/strict');
+          const data = JSON.parse(fs.readFileSync('sorteio-criptografado.json', 'utf8'));
+          const people = ['Marcela','Rafaela','Regina','Joadeson','Joel','José'];
+          assert.deepEqual(Object.keys(data).filter(k => k !== '__admin__').sort(), [...people].sort());
+          for (const person of people) {
+            assert.ok(data[person]?.salt && data[person]?.iv && data[person]?.data, 'Cifragem ausente: '+person);
+          }
+          assert.ok(data.__admin__?.salt && data.__admin__?.iv && data.__admin__?.data, 'Cofre do administrador ausente');
+          const html = fs.readFileSync('admin.html','utf8');
+          const js = fs.readFileSync('admin.js','utf8');
+          const ids = new Set([...html.matchAll(/id="([^"]+)"/g)].map(m=>m[1]));
+          for (const match of js.matchAll(/\$\("#([^"]+)"\)/g)) {
+            assert.ok(ids.has(match[1]), 'Elemento ausente na interface: '+match[1]);
+          }
+          assert.ok(html.includes('src="./admin.js"'));
+          assert.ok(html.includes('href="./admin.css"'));
+          assert.ok(fs.readFileSync('index.html','utf8').includes('href="./admin.html"'));
+          console.log('OK: scripts, criptografia, seis participantes e elementos da interface.');
+          NODE
