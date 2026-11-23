@@ -10,6 +10,8 @@
   let adminPassword = null;
   let draft = null;
   let draftCodes = null;
+  let draftAssignments = null;
+  let codesDownloaded = false;
 
   const bytesFromBase64 = (encoded) => Uint8Array.from(atob(encoded), c => c.charCodeAt(0));
   const base64FromBytes = (bytes) => {
@@ -264,6 +266,8 @@
       };
       draft = newRecords;
       draftCodes = codes;
+      draftAssignments = assignments;
+      codesDownloaded = false;
       $("#draft-panel").hidden = false;
       $("#draft-panel").scrollIntoView({behavior:"smooth", block:"start"});
     } catch (error) {
@@ -279,6 +283,8 @@
     publicData = null;
     draft = null;
     draftCodes = null;
+    draftAssignments = null;
+    codesDownloaded = false;
     $("#show-matches").checked = false;
     $("#show-codes").checked = false;
     $("#participant-rows").replaceChildren();
@@ -325,17 +331,19 @@
   $("#redraw-button").addEventListener("click", redraw);
   $("#download-new-codes").addEventListener("click", () => {
     if (!draftCodes || !vault) return;
+    codesDownloaded = true;
     downloadFile("NOVOS_CODIGOS_PRIVADOS_amigo_oculto.txt",
-      privateList(vault.participants, draftCodes,
-        Object.fromEntries(vault.participants.map((person) => [person, "(consulte o painel depois da publicação)"])),
+      privateList(vault.participants, draftCodes, draftAssignments,
         "Novos códigos - rascunho"),
       "text/plain;charset=utf-8");
   });
   $("#download-json").addEventListener("click", () => {
+    if (draft && !codesDownloaded) { alert("Primeiro baixe os NOVOS CÓDIGOS e guarde o arquivo privado."); return; }
     if (draft) downloadFile("sorteio-criptografado.json", JSON.stringify(draft, null, 2) + "\n", "application/json");
   });
   $("#copy-json").addEventListener("click", async (event) => {
     if (!draft) return;
+    if (!codesDownloaded) { alert("Primeiro baixe os NOVOS CÓDIGOS e guarde o arquivo privado."); return; }
     try {
       await copyText(JSON.stringify(draft, null, 2) + "\n");
       event.target.textContent = "✓ JSON copiado!";
@@ -348,6 +356,8 @@
     if (!window.confirm("Descartar o novo sorteio ainda não publicado?")) return;
     draft = null;
     draftCodes = null;
+    draftAssignments = null;
+    codesDownloaded = false;
     $("#draft-panel").hidden = true;
     $("#redraw-message").textContent = "Rascunho descartado. O sorteio atual não foi modificado.";
   });
