@@ -322,6 +322,10 @@
       privateList(vault.participants, vault.codes, vault.assignments, "Códigos atuais"),
       "text/plain;charset=utf-8");
   });
+  $("#download-backup").addEventListener("click", () => {
+    if (!publicData) return;
+    downloadFile("BACKUP_sorteio_criptografado_atual.json", JSON.stringify(publicData, null, 2) + "\n", "application/json");
+  });
   $("#clear-tests").addEventListener("click", () => {
     // A página dos convidados não armazena resultado nem status de leitura.
     sessionStorage.removeItem("amigo_oculto_teste");
